@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Editor</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+<h1 style="text-align: center">Edit Event:</h1>
+<div id="schedule-form" style="background: white; position: absolute; left: 40%; top: 15%; font-size: 30px; text-align: left">
+    <label for="Event">Select Event:</label>
+    <select name="Event" id="event">
+        <option selected="selected">Select Event</option>
+    </select>
+    <br><br>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter Event Name">
+    <br><br>
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date"/>
+    <br><br>
+    <label for="start-time">Start Time:</label>
+    <input type="time" id="start-time" name="start-time">
+    <br><br>
+    <label for="end-time">End Time:</label>
+    <input type="time" id="end-time" name="end-time">
+    <br><br>
+    <label for="tickets">Tickets Available:</label>
+    <input type="text" id="tickets" name="tickets" placeholder="Enter # of Available Tickets">
+    <br><br>
+    <label for="genre">Genre:</label>
+    <select name="genre" id="genre">
+        <option value="Classical">Classical</option>
+        <option value="EDM">EDM</option>
+        <option value="Hip-Hop">Hip-Hop</option>
+        <option value="Indie Rock">Indie Rock</option>
+        <option value="Jazz">Jazz</option>
+        <option value="K-Pop">K-Pop</option>
+        <option value="Metal">Metal</option>
+        <option value="Oldies">Oldies</option>
+        <option value="Rap">Rap</option>
+        <option value="Rock">Rock</option>
+        <option value="Blues">Blues</option>
+        <option value="Techno">Techno</option>
+    </select>
+    <br><br>
+    <label for="venue">Venue:</label>
+    <select name="venue" id="venue">
+        <option selected="selected">Select Venue</option>
+    </select>
+    <br><br>
+    <button onclick="editEvent()">Edit Event</button>
+</div>
+<p id="error-message" style="position: absolute; left: 30%; font-size: 20px; bottom: 15%"></p>
+
+</body>
+</html>
+<script>
+
+    $.ajax({
+        type: "POST",
+        url: "eventServlet",
+        data: {
+            action: "Get Venues",
+        },
+        success: function (data) {
+            loadVenues(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+
+    /**
+     * Pulls venues from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadVenues(data){
+        let selectElm = document.getElementById("venue")
+        let concatVenues = data.split(";")
+        for (let i = 0; i < concatVenues.length; i++){
+            let venue = concatVenues[i]
+            let venue_option = document.createElement("option")
+            venue_option.innerHTML = venue
+            venue_option.value = venue
+            selectElm.appendChild(venue_option)
+        }
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "eventServlet",
+        data: {
+            action: "Get Events",
+        },
+        success: function (data) {
+            loadEvents(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+    /**
+     * Pulls events from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadEvents(data){
+        let selectElm = document.getElementById("event")
+        let concatEvents = data.split(";")
+        for (let i = 0; i < concatEvents.length; i++){
+            let event = concatEvents[i]
+            let event_option = document.createElement("option")
+            event_option.innerHTML = event
+            event_option.value = event
+            selectElm.appendChild(event_option)
+        }
+    }
+
+
+    /**
+     * Passes inputted event into the backend and updates its associated attributes
+     * @returns {boolean}
+     */
+    function editEvent(){
+        let name, start_time, end_time, tickets_available, genre, venue, new_event_name, date
+
+        name = document.getElementById("event").value
+        start_time = document.getElementById("start-time").value
+        end_time = document.getElementById("end-time").value
+        tickets_available = document.getElementById("tickets").value
+        genre = document.getElementById("genre").value
+        venue = document.getElementById("venue").value
+        new_event_name = document.getElementById("name").value
+        date = document.getElementById("date").value
+
+        if (name.length == 0 || start_time.length == 0 || end_time.length == 0 ||
+            tickets_available.length == 0 || date.length == 0){
+            alert("Please Enter a Value for All Inputs")
+            return false
+        }
+
+        if (name === "Select Event"){
+            alert("Please Select an Event")
+            return false
+        }
+
+        if (venue === "Select Venue"){
+            alert("Please Select a Venue")
+            return false
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: "eventServlet",
+            data: {
+                action: "Edit Event",
+                name: name,
+                new_event_name: new_event_name,
+                start_time: start_time,
+                end_time: end_time,
+                tickets_available: tickets_available,
+                genre: genre,
+                venue: venue,
+                date: date
+            },
+            success: function (data) {
+                let error_holder = document.getElementById("error-message")
+                if (data.includes("Error")){
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "red"
+                }
+                else {
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "green"
+                }
+            },
+            error: function (textStatus, errorThrown) {
+            }
+
+        });
+
+
+    }
+</script>

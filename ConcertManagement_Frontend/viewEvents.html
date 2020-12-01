@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Events</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<style>
+    .event-border{
+        position: relative;
+        border: 1px solid black;
+    }
+    body {
+        background: lightgrey;
+    }
+</style>
+<body>
+    <h1 id="Title" style="text-align: center">VIEW UPCOMING EVENTS</h1>
+    <div id="filters-and-sorts" style="margin-top: 3%">
+        <div style="position: absolute; right: 53%">
+            <label for="sort"><b>Sort By:</b></label>
+            <select name="sort" id="sort">
+                <option value="Default">Default</option>
+                <option value="Newest">Newest</option>
+                <option value="Oldest">Oldest</option>
+                <option value="A-Z">A-Z</option>
+                <option value="Z-A">Z-A</option>
+            </select>
+        </div>
+        <div style="position: absolute; right: 41%">
+            <label for="genre"><b>Genre:</b></label>
+            <select name="genre" id="genre">
+                <option value="Any">Any</option>
+                <option value="Classical">Classical</option>
+                <option value="EDM">EDM</option>
+                <option value="Hip-Hop">Hip-Hop</option>
+                <option value="Indie Rock">Indie Rock</option>
+                <option value="Jazz">Jazz</option>
+                <option value="K-Pop">K-Pop</option>
+                <option value="Metal">Metal</option>
+                <option value="Oldies">Oldies</option>
+                <option value="Rap">Rap</option>
+                <option value="Rock">Rock</option>
+                <option value="Blues">Blues</option>
+                <option value="Techno">Techno</option>
+            </select>
+        </div>
+        <div style="position: absolute; right: 20%">
+            <label for="venue"><b>Venue:</b></label>
+            <select name="venue" id="venue">
+                <option value="Any">Any</option>
+            </select>
+        </div>
+        <div style="position: absolute; right: 8%">
+            <button onclick="loadEvents()">Submit</button>
+        </div>
+    </div>
+    <br><br>
+
+    <div id="event-holder">
+<!--        <div class="event-border">-->
+<!--            <h3>Event Name</h3>-->
+<!--            <h5>Date</h5>-->
+<!--            <h5>Time</h5>-->
+<!--        </div>-->
+<!--        <div class="event-border">-->
+<!--            <h3>Event Name</h3>-->
+<!--            <h5>Date</h5>-->
+<!--            <h5>Time</h5>-->
+<!--        </div>-->
+    </div>
+    <h1 id="no-match" style="display: none; text-align: center; margin-top: 20%">NO EVENTS MATCH THE CRITERIA</h1>
+
+</body>
+</html>
+<script>
+
+    $( document ).ready(function() {
+        eventLoader(localStorage.getItem("data"))
+    });
+
+
+    /**
+     * Sends filters and sort into the backend and dynamically appends responses into
+     * the html page
+     * @param data
+     */
+    function eventLoader(data){
+        let events = data.split("\n")
+        let blankCnt = getBlankCount(events)
+        let event_holder = document.getElementById("event-holder")
+        event_holder.innerHTML = ''
+        if (events.length - blankCnt == 0){
+            document.getElementById("no-match").style.display = "block"
+        }
+        else{
+            document.getElementById("no-match").style.display = "none"
+        }
+        for (let i = 0; i < events.length ; i++){
+            if (events[i].length == 0){
+                continue
+            }
+            let event_info = events[i].split(";")
+            let name = event_info[6]
+            let date = event_info[7]
+            let start_time = event_info[1]
+            start_time = start_time.substring(start_time.length - 10)
+            start_time = start_time.substring(0, start_time.length - 5)
+            start_time = convertTime(start_time)
+            let venue = event_info[5]
+            let genre = event_info[4]
+            let eventDiv = document.createElement("div")
+            eventDiv.setAttribute("class", "event-border")
+            event_holder.appendChild(eventDiv)
+
+            let headerElm = document.createElement("h3")
+            headerElm.innerHTML = name
+            eventDiv.appendChild(headerElm)
+
+            let dateElm = document.createElement("h5")
+            dateElm.innerHTML = date
+            eventDiv.appendChild(dateElm)
+
+            let startElm = document.createElement("h5")
+            startElm.innerHTML = start_time
+            eventDiv.appendChild(startElm)
+
+            let venueElm = document.createElement("h5")
+            venueElm.innerHTML = venue
+            eventDiv.appendChild(venueElm)
+
+            let genreElm = document.createElement("h5")
+            genreElm.innerHTML = genre
+            eventDiv.appendChild(genreElm)
+
+
+        }
+
+    }
+
+    /**
+     * Converts datetime to local time
+     * @param time
+     * @returns {string}
+     */
+    function convertTime(time){
+        let indicator
+        let hour = time.split(":")[0]
+        let minute = time.split(":")[1]
+        let numHour = parseInt(hour)
+        if (numHour < 12 || numHour == 24){
+            indicator = "AM"
+        }
+        else {
+            indicator = "PM"
+        }
+
+        if (numHour > 12){
+            numHour = numHour - 12
+        }
+
+        let newTime = numHour.toString() + ":" + minute + " " + indicator
+        return newTime
+
+    }
+
+    /**
+     * Helper function used to count # of blank lines
+     * @param data
+     * @returns {number}
+     */
+    function getBlankCount(data){
+        let blankCnt = 0
+        for (let i = 0; i < data.length; i++){
+            let currentData = data[i]
+            if (currentData.length == 0){
+                console.log("YESSS")
+                blankCnt++
+            }
+        }
+        return blankCnt
+    }
+
+
+    // _____________ LOAD VENUES _______________________________________________
+
+    $.ajax({
+        type: "POST",
+        url: "eventServlet",
+        data: {
+            action: "Get Venues",
+        },
+        success: function (data) {
+            loadVenues(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+
+    /**
+     * Pulls venues from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadVenues(data){
+        let selectElm = document.getElementById("venue")
+        let concatVenues = data.split(";")
+        for (let i = 0; i < concatVenues.length; i++){
+            let venue = concatVenues[i]
+            let venue_option = document.createElement("option")
+            venue_option.innerHTML = venue
+            venue_option.value = venue
+            selectElm.appendChild(venue_option)
+        }
+    }
+
+    // ___________________________________________________________________________
+
+    /**
+     * Pulls events from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadEvents(){
+        let sort, genre, venue
+
+        sort = document.getElementById("sort").value
+        genre = document.getElementById("genre").value
+        venue = document.getElementById("venue").value
+
+        $.ajax({
+            type: "POST",
+            url: "viewServlet",
+            data: {
+                sort: sort,
+                genre: genre,
+                venue: venue
+            },
+            success: function (data) {
+                eventLoader(data)
+
+            },
+            error: function (textStatus, errorThrown) {
+            }
+
+        });
+
+    }
+
+    loadEvents()
+
+
+
+</script>

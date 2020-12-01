@@ -1,0 +1,50 @@
+<html>
+<head>
+    <title>login form</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <div id="mainHeader">
+        <h1 style="text-align: center; margin-top: 70px">CONCERT VENUE MANAGEMENT PORTAL</h1>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <style>
+        body {
+            background-image: url("Back_Stage.jpg");
+        }
+        p {
+            color: white;
+            font-size: 20px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 60px;
+        }
+    </style>
+</head>
+<body>
+<div id="non-admin" style ="height: 200px; width: 400px; border: 2px solid black; position: absolute; left: 37%; top: 30%;">
+
+</div>
+<div id="login-container" style ="background: white; height: 200px; width: 400px; border: 2px solid black; position: absolute; left: 37%; top: 30%;">
+    <br><br>
+    <form method="post" action="LoginServlet">
+        <div style="margin-left: 10%">
+            Email: &nbsp<input placeholder="Enter Admin Email" type="text" name="email" /><br/>
+        </div>
+        <br><br>
+        <div style="margin-left: 10%">
+            Password: &nbsp<input style="width: 41%" placeholder="Enter Admin Password" type="text" name="password" /><br/>
+        </div>
+        <br><br>
+        <div style="margin-left: 10%">
+            <input style="width: 30%" type="submit" value="Login" />
+        </div>
+    </form>
+</div>
+
+<p style="position: absolute; left: 10%; bottom: 10%">@2020 Nova Development Inc Located in Reston, VA</p>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Area</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <style>
+        body {
+            background-image: url("Concert_Admin.jpg");
+            background-repeat: no-repeat;
+            background-size: auto;
+        }
+        /*p {*/
+        /*    color: white;*/
+        /*    font-size: 20px;*/
+        /*}*/
+
+        /*h1 {*/
+        /*    color: white;*/
+        /*    font-size: 60px;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<h1 style="text-align: center">ADMINISTRATION AREA</h1>
+<div class="card" onclick="navEventManagement()" id="manage-events" style="position: absolute; left: 32.5%; top: 25%">
+    <br><br>
+    <h3>Manage Events</h3>
+</div>
+<div class="card" onclick="navBandManagement()" id="manage-bands" style="position: absolute; left: 47.5%; top: 25%">
+    <br><br>
+    <h3>Manage Bands</h3>
+</div>
+<div class="card" onclick="navVenueManagement()" id="manage-venues" style="position: absolute; left: 32.5%; top: 47.5%">
+    <br><br>
+    <h3>Manage Venues</h3>
+</div>
+<div class="card" onclick="navRatingManagement()" id="apply-ratings" style="position: absolute; left: 47.5%; top: 47.5%">
+    <br><br>
+    <h3>Apply Ratings</h3>
+</div>
+<p style="position: absolute; left: 10%; bottom: 10%">@2020 Nova Development Inc Located in Reston, VA</p>
+
+</body>
+</html>
+<script>
+    function navEventManagement(){
+        window.location.href = "event_management_main.html"
+    }
+
+    function navBandManagement(){
+        window.location.href = "band_management_main.html"
+    }
+
+    function navVenueManagement(){
+        window.location.href = "venue_management_main.html"
+    }
+
+    function navRatingManagement(){
+        window.location.href = "rating_management_main.html"
+    }
+
+</script>

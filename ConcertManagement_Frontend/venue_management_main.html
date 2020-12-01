@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Venue Area</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+<h1 style="text-align: center">VENUE MANAGEMENT</h1>
+<div class="card" onclick="navAddVenue()" id="add-venue" style="position: absolute; left: 25%; top: 25%">
+    <br><br>
+    <h3>Add Venue</h3>
+</div>
+<div class="card" onclick="navDeleteVenue()" id="remove-venue" style="position: absolute; left: 40%; top: 25%">
+    <br><br>
+    <h3>Remove Venue</h3>
+</div>
+<div class="card" onclick="navEditVenue()" id="edit-venue" style="position: absolute; left: 55%; top: 25%">
+    <br><br>
+    <h3>Edit Venue</h3>
+</div>
+<p style="position: absolute; left: 10%; bottom: 10%">@2020 Nova Development Inc Located in Reston, VA</p>
+
+</body>
+</html>
+<script>
+    function navAddVenue(){
+        window.location.href = "add_venue.html"
+    }
+
+    function navEditVenue(){
+        window.location.href = "edit_venue.html"
+    }
+
+    function navDeleteVenue(){
+        window.location.href = "delete_venue.html"
+    }
+</script>

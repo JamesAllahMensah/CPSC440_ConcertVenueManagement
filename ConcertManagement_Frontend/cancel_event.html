@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Cancelor</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+<h1 style="text-align: center">Cancel Event:</h1>
+<div id="schedule-form" style="background: white; position: absolute; left: 40%; top: 15%; font-size: 30px; text-align: left">
+    <label for="Event">Select Event:</label>
+    <select name="Event" id="event">
+        <option selected="selected">Select Event</option>
+    </select>
+    <br><br>
+
+    <button onclick="deleteEvent()">Cancel Event</button>
+</div>
+<p id="error-message" style="position: absolute; left: 30%; font-size: 20px; bottom: 75%"></p>
+
+</body>
+</html>
+<script>
+
+    $.ajax({
+        type: "POST",
+        url: "eventServlet",
+        data: {
+            action: "Get Events",
+        },
+        success: function (data) {
+            loadEvents(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+    /**
+     * Pulls events from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadEvents(data){
+        let selectElm = document.getElementById("event")
+        let concatEvents = data.split(";")
+        for (let i = 0; i < concatEvents.length; i++){
+            let event = concatEvents[i]
+            let event_option = document.createElement("option")
+            event_option.innerHTML = event
+            event_option.value = event
+            selectElm.appendChild(event_option)
+        }
+    }
+
+
+    /**
+     * Takes in inputted event with associated attributes and updates in the backend
+     * @returns {boolean}
+     */
+    function deleteEvent(){
+        let name = document.getElementById("event").value
+
+        if (name === "Select Event"){
+            alert("Please Select an Event")
+            return false
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: "eventServlet",
+            data: {
+                action: "Cancel Event",
+                name: name,
+            },
+            success: function (data) {
+                let error_holder = document.getElementById("error-message")
+                if (data.includes("Error")){
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "red"
+                }
+                else {
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "green"
+                }
+            },
+            error: function (textStatus, errorThrown) {
+            }
+
+        });
+
+
+    }
+</script>

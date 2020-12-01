@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Venue Editor</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+<h1 style="text-align: center">Edit Venue:</h1>
+<div id="schedule-form" style="background: white; position: absolute; left: 40%; top: 15%; font-size: 30px; text-align: left">
+    <label for="venue">Venue:</label>
+    <select name="venue" id="venue">
+        <option selected="selected">Select Venue</option>
+    </select>
+    <br><br>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter Event Name">
+    <br><br>
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" placeholder="Enter a Location">
+    <br><br>
+    <label for="capacity">Capacity:</label>
+    <input type="text" id="capacity" name="capacity" placeholder="Enter a Capacity">
+    <br><br>
+
+    <button onclick="editVenue()">Edit Venue</button>
+</div>
+<p id="error-message" style="position: absolute; left: 30%; font-size: 20px; bottom: 15%"></p>
+
+</body>
+</html>
+<script>
+
+    $.ajax({
+        type: "POST",
+        url: "eventServlet",
+        data: {
+            action: "Get Venues",
+        },
+        success: function (data) {
+            loadVenues(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+
+    /**
+     * Pulls events from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadVenues(data){
+        let selectElm = document.getElementById("venue")
+        let concatVenues = data.split(";")
+        for (let i = 0; i < concatVenues.length; i++){
+            let venue = concatVenues[i]
+            let venue_option = document.createElement("option")
+            venue_option.innerHTML = venue
+            venue_option.value = venue
+            selectElm.appendChild(venue_option)
+        }
+    }
+
+
+    /**
+     * Passes in venue name with associated attributes and updates in the backend
+     * @returns {boolean}
+     */
+    function editVenue(){
+        let name, location, capacity, venueName
+
+        name = document.getElementById("name").value
+        location = document.getElementById("location").value
+        capacity = document.getElementById("capacity").value
+        venueName = document.getElementById("venue").value
+
+        if (name.length == 0 || location.length == 0 || capacity.length == 0){
+            alert("Please Enter a Value for all Inputs.")
+            return false
+        }
+
+        let capac = parseInt(capacity)
+        if (!Number.isInteger(capac)){
+            alert("Please Enter a Numerical Value for Capacity.")
+            return false
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: "venueServlet",
+            data: {
+                action: "Edit Venue",
+                name: name,
+                location: location,
+                capacity: capacity,
+                venue: venueName
+            },
+            success: function (data) {
+                let error_holder = document.getElementById("error-message")
+                if (data.includes("Error")){
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "red"
+                }
+                else {
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "green"
+                }
+            },
+            error: function (textStatus, errorThrown) {
+            }
+
+        });
+
+
+    }
+</script>

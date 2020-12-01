@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Band Editor</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+<h1 style="text-align: center">Edit Band:</h1>
+<div id="schedule-form" style="background: white; position: absolute; left: 40%; top: 15%; font-size: 30px; text-align: left">
+    <label for="band">Select Band:</label>
+    <select name="band" id="band">
+        <option selected="selected">Select Band</option>
+    </select>
+    <br><br>
+    <label for="name">Edit Band Name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter Band Name">
+    <br><br>
+    <label for="performer">Edit Performer(s):</label>
+    <select name="performer" id="performer" multiple>
+        <option selected="selected">Select Performer(s)</option>
+        <option>None</option>
+    </select>
+    <br><br>
+    <label for="genre">Edit Genre:</label>
+    <select name="genre" id="genre">
+        <option value="Classical">Classical</option>
+        <option value="EDM">EDM</option>
+        <option value="Hip-Hop">Hip-Hop</option>
+        <option value="Indie Rock">Indie Rock</option>
+        <option value="Jazz">Jazz</option>
+        <option value="K-Pop">K-Pop</option>
+        <option value="Metal">Metal</option>
+        <option value="Oldies">Oldies</option>
+        <option value="Rap">Rap</option>
+        <option value="Rock">Rock</option>
+        <option value="Blues">Blues</option>
+        <option value="Techno">Techno</option>
+    </select>
+    <br><br>
+    <label for="event">Edit Event:</label>
+    <select name="event" id="event">
+        <option selected="selected">Select Event</option>
+    </select>
+    <br><br>
+    <button onclick="editBand()">Edit Band</button>
+</div>
+<p id="error-message" style="position: absolute; left: 30%; font-size: 20px; bottom: 15%"></p>
+
+</body>
+</html>
+<script>
+
+    $.ajax({
+        type: "POST",
+        url: "eventServlet",
+        data: {
+            action: "Get Events",
+        },
+        success: function (data) {
+            loadEvents(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+    /**
+     * Pulls events from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadEvents(data){
+        let selectElm = document.getElementById("event")
+        let concatEvents = data.split(";")
+        for (let i = 0; i < concatEvents.length; i++){
+            let event = concatEvents[i]
+            let event_option = document.createElement("option")
+            event_option.innerHTML = event
+            event_option.value = event
+            selectElm.appendChild(event_option)
+        }
+    }
+
+
+    $.ajax({
+        type: "POST",
+        url: "bandServlet",
+        data: {
+            action: "Get Performers",
+        },
+        success: function (data) {
+            loadPerformers(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+    /**
+     * Pulls performers from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadPerformers(data){
+        let selectElm = document.getElementById("performer")
+        let concatPerformer = data.split(";")
+        for (let i = 0; i < concatPerformer.length; i++){
+            let performer = concatPerformer[i]
+            let performer_option = document.createElement("option")
+            performer_option.innerHTML = performer
+            performer_option.value = performer
+            selectElm.appendChild(performer_option)
+        }
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "bandServlet",
+        data: {
+            action: "Get Band",
+        },
+        success: function (data) {
+            console.log(data)
+            loadBands(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+    /**
+     * Pulls bands from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadBands(data){
+        let selectElm = document.getElementById("band")
+        let concatBand = data.split(";")
+        for (let i = 0; i < concatBand.length; i++){
+            let band = concatBand[i]
+            let band_option = document.createElement("option")
+            band_option.innerHTML = band
+            band_option.value = band
+            selectElm.appendChild(band_option)
+        }
+    }
+
+
+    /**
+     * Sends inputted band and new attributes and updates them in the backend
+     * @returns {boolean}
+     */
+    function editBand(){
+        let performerArr = $('#performer').val();
+        let performerList = ""
+        for (let i = 0; i < performerArr.length; i++){
+            let performer = performerArr[i]
+            performerList += performer + ";"
+        }
+        performerList = performerList.substring(0, performerList.length - 1)
+
+        let name, genre, event, band
+
+        name = document.getElementById("name").value
+        genre = document.getElementById("genre").value
+        event = document.getElementById("event").value
+        band = document.getElementById("band").value
+
+        if (band === "Select Band"){
+            alert("Please Select a Band")
+            return false
+        }
+
+        if (name.length == 0){
+            alert("Please Enter a Band Name")
+            return false
+        }
+
+        if (performerList.includes("Select Performer(s)")){
+            alert("Please select None if no available performers.")
+        }
+
+        if (event === "Select Event"){
+            alert("Please Select an Event")
+            return false
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "bandServlet",
+            data: {
+                action: "Edit Band",
+                name: name,
+                performers: performerList,
+                genre: genre,
+                event: event,
+                band: band
+            },
+            success: function (data) {
+                let error_holder = document.getElementById("error-message")
+                if (data.includes("Error")){
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "red"
+                }
+                else {
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "green"
+                }
+            },
+            error: function (textStatus, errorThrown) {
+            }
+
+        });
+
+
+    }
+</script>

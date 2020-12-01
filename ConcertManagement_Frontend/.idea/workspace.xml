@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4865564e-9199-4e44-b3b0-d6f245a4fb91" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="CSS File" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1i9ske3Scmr9DYOS8d1Rxtz8NRa" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\ConcertManagement" />
+      <recent name="C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\ConcertManagement\images" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\clearpath" />
+      <recent name="C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps\clearpath\PCSE" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4865564e-9199-4e44-b3b0-d6f245a4fb91" name="Default Changelist" comment="" />
+      <created>1601331286548</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1601331286548</updated>
+      <workItem from="1601331289628" duration="1359000" />
+      <workItem from="1601332703701" duration="9981000" />
+      <workItem from="1601506671311" duration="1666000" />
+      <workItem from="1601780810515" duration="1333000" />
+      <workItem from="1602385174917" duration="2052000" />
+      <workItem from="1602426786397" duration="23552000" />
+      <workItem from="1602970535754" duration="17676000" />
+      <workItem from="1603303922531" duration="27761000" />
+      <workItem from="1604615098897" duration="44771000" />
+      <workItem from="1604725490692" duration="4669000" />
+      <workItem from="1604958444287" duration="4249000" />
+      <workItem from="1605310612231" duration="11244000" />
+      <workItem from="1605322011843" duration="9365000" />
+      <workItem from="1605337892738" duration="4921000" />
+      <workItem from="1605343327663" duration="2678000" />
+      <workItem from="1605369030956" duration="11334000" />
+      <workItem from="1605688358441" duration="91915000" />
+      <workItem from="1606256583517" duration="13364000" />
+      <workItem from="1606281595407" duration="46895000" />
+      <workItem from="1606803223094" duration="4631000" />
+      <workItem from="1606809462545" duration="414000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2873" y="247" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1606806259298">
+      <screen x="2256" y="0" width="1920" height="1040" />
+    </state>
+    <state x="483" y="229" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1504.963/2256.0.1920.1040@0.0.1504.963" timestamp="1601335266915" />
+    <state x="2873" y="247" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1504.963/2256.0.1920.1040@2256.0.1920.1040" timestamp="1606806259298" />
+    <state x="580" y="255" key="FileChooserDialogImpl" timestamp="1606576687787">
+      <screen x="0" y="0" width="1504" height="963" />
+    </state>
+    <state x="2996" y="275" key="FileChooserDialogImpl/0.0.1504.963/2256.0.1920.1040@2256.0.1920.1040" timestamp="1606280935107" />
+    <state x="580" y="255" key="FileChooserDialogImpl/0.0.1504.963@0.0.1504.963" timestamp="1606576687787" />
+    <state x="2717" y="165" key="SettingsEditor" timestamp="1604695284027">
+      <screen x="2256" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2717" y="165" key="SettingsEditor/0.0.1504.963/2256.0.1920.1040@2256.0.1920.1040" timestamp="1604695284027" />
+    <state x="2256" y="0" width="1226" height="950" key="dock-window-1" timestamp="1606324051090">
+      <screen x="2256" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2256" y="0" width="1226" height="950" key="dock-window-1/0.0.1504.963/2256.0.1920.1040@0.0.1504.963" timestamp="1606324051090" />
+    <state x="2923" y="73" width="585" height="894" key="find.popup" timestamp="1605802359538">
+      <screen x="2256" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2923" y="73" width="585" height="894" key="find.popup/0.0.1504.963/2256.0.1920.1040@2256.0.1920.1040" timestamp="1605802359538" />
+    <state x="2778" y="240" key="run.anything.popup" timestamp="1604646556248">
+      <screen x="2256" y="0" width="1920" height="1040" />
+    </state>
+    <state x="409" y="222" key="run.anything.popup/0.0.1504.963/2256.0.1920.1040@0.0.1504.963" timestamp="1601333759592" />
+    <state x="2778" y="240" key="run.anything.popup/0.0.1504.963/2256.0.1920.1040@2256.0.1920.1040" timestamp="1604646556248" />
+    <state x="2617" y="241" key="search.everywhere.popup" timestamp="1604695251672">
+      <screen x="2256" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2459" y="435" key="search.everywhere.popup/0.0.1504.963/2256.0.1080.1880@2256.0.1080.1880" timestamp="1604623069841" />
+    <state x="2617" y="241" key="search.everywhere.popup/0.0.1504.963/2256.0.1920.1040@2256.0.1920.1040" timestamp="1604695251672" />
+  </component>
+</project>

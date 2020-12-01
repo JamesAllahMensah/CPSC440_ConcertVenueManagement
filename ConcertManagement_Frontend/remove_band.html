@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Band Deletion</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+<h1 style="text-align: center">Remove Band:</h1>
+<div id="schedule-form" style="background: white; position: absolute; left: 40%; top: 15%; font-size: 30px; text-align: left">
+    <label for="band">Select Band:</label>
+    <select name="band" id="band">
+        <option selected="selected">Select Band</option>
+    </select>
+    <br><br>
+    <button onclick="removeBand()">Remove Band</button>
+</div>
+<p id="error-message" style="position: absolute; left: 30%; font-size: 20px; bottom: 15%"></p>
+
+</body>
+</html>
+<script>
+
+    $.ajax({
+        type: "POST",
+        url: "bandServlet",
+        data: {
+            action: "Get Band",
+        },
+        success: function (data) {
+            console.log(data)
+            loadBands(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+    /**
+     * Pulls band from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadBands(data){
+        let selectElm = document.getElementById("band")
+        let concatBand = data.split(";")
+        for (let i = 0; i < concatBand.length; i++){
+            let band = concatBand[i]
+            let band_option = document.createElement("option")
+            band_option.innerHTML = band
+            band_option.value = band
+            selectElm.appendChild(band_option)
+        }
+    }
+
+
+    /**
+     * Passes inputted band with attributes and updates into the backend
+     * @returns {boolean}
+     */
+    function removeBand(){
+        let band = document.getElementById("band").value
+        if (band === "Select Band"){
+            alert("Please Select a Band")
+            return false
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "bandServlet",
+            data: {
+                action: "Renove Band",
+                band: band
+            },
+            success: function (data) {
+                let error_holder = document.getElementById("error-message")
+                if (data.includes("Error")){
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "red"
+                }
+                else {
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "green"
+                }
+            },
+            error: function (textStatus, errorThrown) {
+            }
+
+        });
+
+
+    }
+</script>

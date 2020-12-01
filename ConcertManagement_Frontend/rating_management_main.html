@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Editor</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+<h1 style="text-align: center">APPLY RATINGS:</h1>
+<div id="schedule-form" style="position: absolute; left: 40%; top: 15%; font-size: 30px; text-align: left">
+    <label for="Event">Select Event:</label>
+    <select name="Event" id="event">
+        <option selected="selected">Select Event</option>
+    </select>
+    <br><br>
+
+    <label for="num_tickets_sold">Number of Tickets Sold:</label>
+    <input type="text" id="num_tickets_sold" name="num_tickets_sold" placeholder="Enter # of Tickets Sold">
+    <br><br>
+    <label for="crowd_volume">Enter Crowd Volume (Out of 100):</label>
+    <input type="text" id="crowd_volume" name="crowd_volume">
+    <br><br>
+    <label for="performance_length">Performance Length (In Hours):</label>
+    <input type="text" id="performance_length" name="performance_length" placeholder="Enter Length in Hours">
+    <br><br>
+    <label for="num_songs_performed">Number of Songs Performed:</label>
+    <input type="text" id="num_songs_performed" name="num_songs_performed" placeholder="Enter # of Songs Performed">
+    <br><br>
+
+    <button onclick="getScore()">Calculate Score</button>
+</div>
+<p id="error-message" style="position: absolute; left: 30%; font-size: 20px; bottom: 15%"></p>
+
+</body>
+</html>
+<script>
+
+
+    $.ajax({
+        type: "POST",
+        url: "eventServlet",
+        data: {
+            action: "Get Events",
+        },
+        success: function (data) {
+            loadEvents(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+    /**
+     * Pulls events from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadEvents(data){
+        let selectElm = document.getElementById("event")
+        let concatEvents = data.split(";")
+        for (let i = 0; i < concatEvents.length; i++){
+            let event = concatEvents[i]
+            let event_option = document.createElement("option")
+            event_option.innerHTML = event
+            event_option.value = event
+            selectElm.appendChild(event_option)
+        }
+    }
+
+
+    /**
+     * Passes in needed attributes into the backend, calculates the score, and outputs
+     * it into the backend
+     * @returns {boolean}
+     */
+    function getScore(){
+        let event, num_tickets_sold, crowd_volume, performance_length, num_songs_performed
+
+        event = document.getElementById("event").value
+        num_tickets_sold = document.getElementById("num_tickets_sold").value
+        crowd_volume = document.getElementById("crowd_volume").value
+        performance_length = document.getElementById("performance_length").value
+        num_songs_performed = document.getElementById("num_songs_performed").value
+
+        if (event === "Select Event"){
+            alert("Please Select an Event")
+            return false
+        }
+
+        if (num_tickets_sold.length == 0){
+            alert("Please Enter the # of Tickets Sold")
+            return false
+        }
+
+        let num_tickets = parseInt(num_tickets_sold)
+        if (!Number.isInteger(num_tickets)){
+            alert("The number of tickets must be a numeric value.")
+            return false
+        }
+
+        if (crowd_volume.length == 0){
+            alert("Please enter a number for crowd volume")
+            return false
+        }
+
+        let cV = parseInt(crowd_volume)
+        if (!Number.isInteger(cV)){
+            alert("The crowd volume must be a numeric value.")
+            return false
+        }
+
+        if (cV > 100){
+            alert("The crowd volume must be less than or equal to 100.")
+            return false
+        }
+
+        if (performance_length.length == 0){
+            alert("Please enter a value for the performance length")
+        }
+
+        let num_hours = parseInt(performance_length)
+        if (!Number.isInteger(num_hours)){
+            alert("The performance must be a numeric value that represents Hours.")
+            return false
+        }
+
+        if (num_songs_performed.length == 0){
+            alert("Please enter a value for the number of songs performed")
+        }
+
+        let songs = parseInt(num_songs_performed)
+        if (!Number.isInteger(songs)){
+            alert("The number of songs performed must be a numeric value.")
+            return false
+        }
+
+
+
+        $.ajax({
+            type: "POST",
+            url: "ratingServlet",
+            data: {
+                event: event,
+                num_tickets_sold: num_tickets_sold,
+                crowd_volume: crowd_volume,
+                performance_length: performance_length,
+                num_songs_performed: num_songs_performed
+            },
+            success: function (data) {
+                console.log(data)
+                let error_holder = document.getElementById("error-message")
+                if (!data.includes("SCORE")){
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "red"
+                }
+                else {
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "green"
+                }
+            },
+            error: function (textStatus, errorThrown) {
+                console.log(textStatus)
+            }
+
+        });
+
+
+    }
+</script>

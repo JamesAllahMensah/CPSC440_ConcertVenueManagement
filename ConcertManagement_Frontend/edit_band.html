@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Band Area</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+<h1 style="text-align: center">EDIT BAND MENU</h1>
+<div class="card" onclick="navPerformerMenu()" id="add-band" style="position: absolute; left: 35%; top: 25%">
+    <br><br>
+    <h3>Manage Performers</h3>
+</div>
+<div class="card" onclick="navEditBand()" id="remove-band" style="position: absolute; left: 50%; top: 25%">
+    <br><br>
+    <h3>Make Band Changes</h3>
+</div>
+<p style="position: absolute; left: 10%; bottom: 10%">@2020 Nova Development Inc Located in Reston, VA</p>
+
+</body>
+</html>
+<script>
+    function navEditBand(){
+        window.location.href = "band_changes.html"
+    }
+
+    function navPerformerMenu(){
+        window.location.href = "performer_management_main.html"
+    }
+
+
+</script>

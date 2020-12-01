@@ -1,0 +1,143 @@
+<html>
+<head>
+    <title>User Page</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <div id="mainHeader">
+        <h1 style="font-size: 60px; text-align: center; margin-top: 60px">VIEW EVENTS</h1>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+</head>
+<style>
+    .select {
+        text-indent: 20px;
+    }
+    body {
+        background-image: url("LoginPicture.jpg");
+    }
+
+    h1 {
+        color: white
+    }
+</style>
+<body>
+<div id="non-admin" style ="height: 300px; width: 400px; border: 2px solid black; position: absolute; left: 37%; top: 30%;">
+
+</div>
+<div id="login-container" style ="background: white; height: 350px; width: 400px; border: 2px solid black; position: absolute; left: 37%; top: 30%;">
+    <br><br>
+    <div id="genre-holder">
+        <label for="genre"><b>&nbsp; &nbsp; &nbsp;Genre:</b></label><br>
+        <select style="margin-left: 20px; width: 80%" name="genre" id="genre">
+            <option value="Any">Any</option>
+            <option value="Classical">Classical</option>
+            <option value="EDM">EDM</option>
+            <option value="Hip-Hop">Hip-Hop</option>
+            <option value="Indie Rock">Indie Rock</option>
+            <option value="Jazz">Jazz</option>
+            <option value="K-Pop">K-Pop</option>
+            <option value="Metal">Metal</option>
+            <option value="Oldies">Oldies</option>
+            <option value="Rap">Rap</option>
+            <option value="Rock">Rock</option>
+            <option value="Blues">Blues</option>
+            <option value="Techno">Techno</option>
+        </select>
+        <br><br>
+    </div>
+    <div id="venue-holder">
+        <label for="venue"><b>&nbsp; &nbsp; &nbsp;Venue:</b></label><br>
+        <select style="margin-left: 20px; width: 80%" name="venue" id="venue">
+            <option value="Any">Any</option>
+        </select>
+        <br><br>
+    </div>
+
+    <div id="sort-holder">
+        <label for="sort"><b>&nbsp; &nbsp; &nbsp; Sort By:</b></label><br>
+        <select style="margin-left: 20px; width: 80%" name="sort" id="sort">
+            <option value="Default">Default</option>
+            <option value="Newest">Newest</option>
+            <option value="Oldest">Oldest</option>
+            <option value="A-Z">A-Z</option>
+            <option value="Z-A">Z-A</option>
+        </select>
+        <br><br>
+    </div>
+
+    <div style="margin-left: 35%"><br>
+        <button onclick="loadEvents()">VIEW EVENTS</button>
+    </div>
+
+</div>
+
+<p style="position: absolute; left: 46%; bottom: 32%">Admin? Login <a href="admin_login.html">Here</a> </p>
+<p style="font-size: 20px; position: absolute; left: 10%; bottom: 4%">@2020 Nova Development Inc Located in Reston, VA</p>
+
+</body>
+</html>
+<script>
+    $.ajax({
+        type: "POST",
+        url: "eventServlet",
+        data: {
+            action: "Get Venues",
+        },
+        success: function (data) {
+            loadVenues(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+
+    /**
+     * Pulls venues from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadVenues(data){
+        let selectElm = document.getElementById("venue")
+        let concatVenues = data.split(";")
+        for (let i = 0; i < concatVenues.length; i++){
+            let venue = concatVenues[i]
+            let venue_option = document.createElement("option")
+            venue_option.innerHTML = venue
+            venue_option.value = venue
+            selectElm.appendChild(venue_option)
+        }
+    }
+
+    /**
+     * Pulls events from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadEvents(){
+        let sort, genre, venue
+
+        sort = document.getElementById("sort").value
+        genre = document.getElementById("genre").value
+        venue = document.getElementById("venue").value
+
+        $.ajax({
+            type: "POST",
+            url: "viewServlet",
+            data: {
+                sort: sort,
+                genre: genre,
+                venue: venue
+            },
+            success: function (data) {
+                localStorage.setItem("data", data)
+                window.location.href = "viewEvents.html"
+
+            },
+            error: function (textStatus, errorThrown) {
+            }
+
+        });
+
+    }
+</script>

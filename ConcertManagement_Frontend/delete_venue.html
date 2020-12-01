@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Venue Remover</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+<h1 style="text-align: center">Delete Venue:</h1>
+<div id="schedule-form" style="background: white; position: absolute; left: 40%; top: 15%; font-size: 30px; text-align: left">
+    <label for="venue">Venue:</label>
+    <select name="venue" id="venue">
+        <option selected="selected">Select Venue</option>
+    </select>
+    <br><br>
+
+    <button onclick="deleteVenue()">Remove Venue</button>
+</div>
+<p id="error-message" style="position: absolute; left: 30%; font-size: 20px; bottom: 75%"></p>
+
+</body>
+</html>
+<script>
+
+    $.ajax({
+        type: "POST",
+        url: "venueServlet",
+        data: {
+            action: "Get Venues",
+        },
+        success: function (data) {
+            loadVenues(data)
+        },
+        error: function (textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+
+    });
+
+
+    /**
+     * Pulls venues from the backend and dynamically loads them into the dropdown
+     * @param data
+     */
+    function loadVenues(data){
+        let selectElm = document.getElementById("venue")
+        let concatVenues = data.split(";")
+        for (let i = 0; i < concatVenues.length; i++){
+            let venue = concatVenues[i]
+            let venue_option = document.createElement("option")
+            venue_option.innerHTML = venue
+            venue_option.value = venue
+            selectElm.appendChild(venue_option)
+        }
+    }
+
+    /**
+     * Passes input venue into the backend and removes from the database
+     * @returns {boolean}
+     */
+    function deleteVenue(){
+        let name = document.getElementById("venue").value
+
+        if (name === "Select Venue"){
+            alert("Please Select a Venue")
+            return false
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: "venueServlet",
+            data: {
+                action: "Remove Venue",
+                name: name,
+            },
+            success: function (data) {
+                let error_holder = document.getElementById("error-message")
+                if (data.includes("Error")){
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "red"
+                }
+                else {
+                    error_holder.innerHTML = data
+                    error_holder.style.color = "green"
+                }
+            },
+            error: function (textStatus, errorThrown) {
+            }
+
+        });
+
+
+    }
+</script>
